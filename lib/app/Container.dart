@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'const.dart' show AppTitle, PrimaryColor, SecondaryColor;
-import 'about.dart' show AboutApp;
+import 'const.dart' show AppTitle, SecondaryColor;
+import 'drawer.dart' show DrawerItem, AppDrawer;
 
 class AppContainer extends StatefulWidget {
   const AppContainer(this.child);
@@ -13,49 +13,21 @@ class AppContainer extends StatefulWidget {
 
 class _AppContainerState extends State<AppContainer> {
 
-  ListTile buildTile(BuildContext context, String title, IconData icon, String route) {
-    return new ListTile(
-      leading: new Icon(icon),
-      title: new Text(title),
-      onTap: () {
-        Navigator.pushReplacementNamed(context, route);
-      },
-    );
-  }
-
   Widget buildDrawer(BuildContext context) {
-    DrawerHeader header = new DrawerHeader(
-        decoration: new BoxDecoration(
-          color: PrimaryColor,
-        ),
-        child: new Center(
-          child: new Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                AppTitle,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: SecondaryColor,
-                  fontSize: 30.0,
-                  fontFamily: 'Roboto',
-                ),
-              ),
-            ],
-          ),
-        )
-    );
 
-
-    return new Drawer(
-      child: new ListView(
-        children: <Widget>[
-          header,
-          this.buildTile(context, 'Schedule', Icons.event, '/schedule'),
-          new AboutApp(),
-        ],
+    return new AppDrawer(<DrawerItem>[
+      new DrawerItem(
+        title: 'Schedule',
+        icon: Icons.event,
+        route: '/schedule',
       ),
-    );
+
+      new DrawerItem(
+        title: 'Announcement',
+        icon: Icons.message,
+        route: '/',
+      )
+    ]);
   }
 
   Widget buildAppBar() {
@@ -74,12 +46,6 @@ class _AppContainerState extends State<AppContainer> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return new DefaultTabController(
       length: 2,
       child: new Scaffold(
