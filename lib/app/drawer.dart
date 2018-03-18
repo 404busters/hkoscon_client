@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
 import 'const.dart' show PrimaryColor, SecondaryColor, AppTitle;
 import 'about.dart' show AboutApp;
-import 'router/router.dart';
+import 'router/router.dart' show Router;
 
-class AppDrawer extends StatefulWidget {
+class AppDrawer extends StatelessWidget {
   const AppDrawer(this.items);
 
   final List<DrawerItem> items;
-
-  @override
-  _AppDrawerState createState() => new _AppDrawerState();
-}
-
-class _AppDrawerState extends State<AppDrawer> {
   Widget _buildHeader() {
     const decoration = const BoxDecoration(
       color: PrimaryColor,
@@ -42,7 +36,7 @@ class _AppDrawerState extends State<AppDrawer> {
   }
 
   Iterable<Widget> _buildItems(BuildContext context) {
-    return widget.items.map((item) => new ListTile(
+    return this.items.map((item) => new ListTile(
       leading: new Icon(item.icon),
       title: new Text(item.title),
       onTap: () {

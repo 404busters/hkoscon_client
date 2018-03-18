@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'router.dart';
-import 'history.dart';
+import 'router.dart' show Router;
+import 'history.dart' show History;
 
 WidgetBuilder _notFound = (BuildContext context) => const Text('Loading');
 
@@ -39,6 +39,9 @@ class RouterState extends State<Router> {
     super.initState();
     this._history = new History();
     this._history.push("/");
+    widget.observers.forEach((observer) {
+      this._history.subscribe(observer);
+    });
   }
 
   @override

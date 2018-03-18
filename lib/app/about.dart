@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'const.dart' show Version;
 
-class AboutApp extends AboutListTile {
-  AboutApp(): super(
-    applicationName: 'HKOSCon',
-    applicationVersion: Version,
-  );
+class AboutApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const AboutListTile(
+      applicationName: 'HKOSCon',
+      applicationVersion: Version,
+    );
+  }
 }

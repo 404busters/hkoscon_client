@@ -16,15 +16,15 @@ class HomePageState extends State<HomePage> {
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          new Text(
+          const Text(
             'Welcome to Hong Kong Open Source Conference 2018',
-            style: new TextStyle(
+            style: const TextStyle(
               fontSize: 16.0,
             ),
           ),
-          new Text(
+          const Text(
             'We hope you can enjoy in the conference',
-            style: new TextStyle(
+            style: const TextStyle(
               fontSize: 12.0,
             ),
           )

@@ -1,5 +1,9 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_analytics/firebase_analytics.dart' show FirebaseAnalytics;
+
+import 'router/history.dart' show HistoryEvent;
 
 final FirebaseAnalytics analytics = new FirebaseAnalytics();
-final FirebaseAnalyticsObserver observer = new FirebaseAnalyticsObserver(analytics: analytics);
+
+void firebaseHistorySubscriber(String action, HistoryEvent event) {
+  analytics.setCurrentScreen(screenName: event.route);
+}
