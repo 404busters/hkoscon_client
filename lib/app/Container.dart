@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'const.dart' show AppTitle, SecondaryColor;
+import 'const.dart' show AppTitle, PrimaryColor, SecondaryColor;
+import 'about.dart' show AboutApp;
 
 class AppContainer extends StatefulWidget {
   const AppContainer(this.child);
@@ -11,22 +12,47 @@ class AppContainer extends StatefulWidget {
 }
 
 class _AppContainerState extends State<AppContainer> {
+
+  ListTile buildTile(BuildContext context, String title, IconData icon, String route) {
+    return new ListTile(
+      leading: new Icon(icon),
+      title: new Text(title),
+      onTap: () {
+        Navigator.pushReplacementNamed(context, route);
+      },
+    );
+  }
+
   Widget buildDrawer(BuildContext context) {
     DrawerHeader header = new DrawerHeader(
+        decoration: new BoxDecoration(
+          color: PrimaryColor,
+        ),
         child: new Center(
           child: new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              new Image.network('https://hkoscon.org/logo-72.png'),
-              const Text(AppTitle),
+              const Text(
+                AppTitle,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: SecondaryColor,
+                  fontSize: 30.0,
+                  fontFamily: 'Roboto',
+                ),
+              ),
             ],
           ),
         )
     );
 
+
     return new Drawer(
       child: new ListView(
         children: <Widget>[
           header,
+          this.buildTile(context, 'Schedule', Icons.event, '/schedule'),
+          new AboutApp(),
         ],
       ),
     );
