@@ -1,4 +1,4 @@
-package org.hkoscon.hkosconclient
+package org.hkoscon
 
 import android.os.Bundle
 
