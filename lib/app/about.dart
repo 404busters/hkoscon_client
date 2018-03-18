@@ -5,7 +5,7 @@ class AboutApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const AboutListTile(
-      applicationName: 'HKOSCon',
+      applicationName: 'HKOSCon Mobile',
       applicationVersion: Version,
     );
   }
