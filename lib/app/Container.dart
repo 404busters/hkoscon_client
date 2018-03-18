@@ -11,6 +11,41 @@ class AppContainer extends StatefulWidget {
 }
 
 class _AppContainerState extends State<AppContainer> {
+  Widget buildDrawer(BuildContext context) {
+    DrawerHeader header = new DrawerHeader(
+        child: new Center(
+          child: new Column(
+            children: <Widget>[
+              new Image.network('https://hkoscon.org/logo-72.png'),
+              const Text(AppTitle),
+            ],
+          ),
+        )
+    );
+
+    return new Drawer(
+      child: new ListView(
+        children: <Widget>[
+          header,
+        ],
+      ),
+    );
+  }
+
+  Widget buildAppBar() {
+    Text title = new Text(
+        AppTitle,
+        style: const TextStyle(
+            color: SecondaryColor
+        )
+    );
+
+    return new AppBar(
+      elevation: 2.0,
+      title: title,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -19,17 +54,13 @@ class _AppContainerState extends State<AppContainer> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return new Scaffold(
-      appBar: new AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: const Text(AppTitle,
-            style: const TextStyle(
-              color: SecondaryColor,
-            )
-        ),
+    return new DefaultTabController(
+      length: 2,
+      child: new Scaffold(
+        appBar: this.buildAppBar(),
+        body: widget.child,
+        drawer: this.buildDrawer(context),
       ),
-      body: widget.child,
     );
   }
 }
