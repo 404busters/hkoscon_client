@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'types.dart' show ContainerBuilder;
 import 'state.dart' show RouterState;
-import 'history.dart' show HistoryEvent;
 
 export 'types.dart';
 export 'state.dart';
 
-typedef void RouteObserver(String action, HistoryEvent event);
+typedef void RouteObserver(String action, dynamic event);
 
 class Router extends StatefulWidget {
   const Router({
