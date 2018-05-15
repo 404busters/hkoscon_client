@@ -20,18 +20,12 @@ class _AppContainerState extends State<AppContainer> {
         title: 'Schedule',
         icon: Icons.event,
         route: '/schedule',
-      ),
-
-      new DrawerItem(
-        title: 'Announcement',
-        icon: Icons.message,
-        route: '/',
       )
     ]);
   }
 
   Widget buildAppBar() {
-    Text title = new Text(
+    Text title = const Text(
         AppTitle,
         style: const TextStyle(
             color: SecondaryColor
@@ -46,13 +40,10 @@ class _AppContainerState extends State<AppContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return new DefaultTabController(
-      length: 2,
-      child: new Scaffold(
-        appBar: this.buildAppBar(),
-        body: widget.child,
-        drawer: this.buildDrawer(context),
-      ),
+    return new Scaffold(
+      appBar: this.buildAppBar(),
+      body: widget.child,
+      drawer: this.buildDrawer(context),
     );
   }
 }
