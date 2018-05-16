@@ -34,18 +34,6 @@ class LoadingView extends StatelessWidget {
       body: new Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          const CircularProgressIndicator(),
-          const Center(
-            child: const Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: const Text(
-                'Loading timetable from remote server',
-                style: const TextStyle(
-                  fontSize: 16.0,
-                ),
-              ),
-            ),
-          ),
           const Center(
             child: const Padding(
               padding: const EdgeInsets.only(top: 8.0),

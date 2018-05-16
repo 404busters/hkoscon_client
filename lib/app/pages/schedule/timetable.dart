@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'state.dart';
 import '../../const.dart';
+import 'detail.dart';
 
 class DayView extends StatelessWidget {
   final Day day;
@@ -12,7 +13,7 @@ class DayView extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 20.0),
       child: new ListView(
         children: day.timeslots
-            .map((timeslot) => TimeslotView(timeslot))
+            .map((timeslot) => TimeslotView(timeslot, day.date, day.day))
             .toList(growable: false),
       ),
     );
@@ -21,7 +22,9 @@ class DayView extends StatelessWidget {
 
 class TimeslotView extends StatelessWidget {
   final Timeslot timeslot;
-  const TimeslotView(this.timeslot);
+  final String date;
+  final int day;
+  const TimeslotView(this.timeslot, this.date, this.day);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,13 @@ class TimeslotView extends StatelessWidget {
 
   List<Widget> buildChildren() {
     final List<Widget> widgets = this.timeslot.events
-        .map<Widget>((event) => EventView(event))
+        .map<Widget>((event) => EventView(
+      event,
+      this.timeslot.startTime,
+      this.timeslot.endTime,
+      this.date,
+      this.day,
+    ))
         .toList(growable: true);
 
     widgets.insert(0, Padding(
@@ -47,8 +56,7 @@ class TimeslotView extends StatelessWidget {
           textAlign: TextAlign.left,
           style: const TextStyle(
             color: PrimaryColor,
-            fontSize: 20.0,
-            fontWeight: FontWeight.w700,
+            fontSize: 18.0,
           ),
         )));
 
@@ -58,14 +66,21 @@ class TimeslotView extends StatelessWidget {
 
 class EventView extends StatelessWidget {
   final Event event;
-  const EventView(this.event);
+  final String startTime;
+  final String endTime;
+  final String date;
+  final int day;
+  const EventView(this.event, this.startTime, this.endTime, this.date, this.day);
 
-  Widget buildCardContent() {
+  Widget _buildCardContent() {
     final topic = event.display != null ? event.display : '???';
     if (!event.topic || event.speakers.length == 0) {
       return new Text(
           topic,
-          style: const TextStyle(fontSize: 16.0)
+          style: const TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.w700,
+          )
       );
     }
 
@@ -76,6 +91,8 @@ class EventView extends StatelessWidget {
           topic,
           style: const TextStyle(
             height: 1.2,
+            fontWeight: FontWeight.w700,
+            fontSize: 18.0,
           ),
         ),
         Padding(
@@ -83,7 +100,7 @@ class EventView extends StatelessWidget {
             child: Text(
               event.speakers.map((speaker) => speaker.name).join(' / '),
               style: const TextStyle(
-                fontSize: 12.0,
+                fontSize: 16.0,
               ),
             )
         )
@@ -93,6 +110,22 @@ class EventView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!event.topic) {
+      return this._buildCard();
+    }
+
+    return new InkResponse(
+      child: this._buildCard(),
+      onTap: () {
+        debugPrint('Tap');
+        Navigator.push(context, new MaterialPageRoute(
+          builder: (context) => new DetailView(event, this.startTime, this.endTime, this.date, this.day),
+        ));
+      },
+    );
+  }
+
+  Widget _buildCard() {
     return new Card(
         child: new Padding(
           padding: const EdgeInsets.all(16.0),
@@ -101,8 +134,8 @@ class EventView extends StatelessWidget {
               new VenueView(event.venue),
               new Expanded(
                 child: new Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: this.buildCardContent(),
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: this._buildCardContent(),
                 ),
               ),
             ],

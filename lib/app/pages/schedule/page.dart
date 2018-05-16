@@ -7,7 +7,7 @@ import './state.dart';
 import './timetable.dart';
 import './component.dart';
 
-const _endpoint = 'https://hkoscon.ddns.net/api/v1/days/HKOSCon%202018';
+const _endpoint = 'https://hkoscon.org/2018/data/timetable.json';
 
 class SchedulePage extends StatefulWidget {
   @override
@@ -15,6 +15,9 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
+
   Conference conference;
   bool isError = false;
 
@@ -24,10 +27,8 @@ class _SchedulePageState extends State<SchedulePage> {
     this.fetchConference();
   }
 
-  Future<void> fetchConference() async {
-    this.setState(() {
-    });
-
+  Future<Null> fetchConference() async {
+    _refreshIndicatorKey.currentState.show();
     final Response response = await get(_endpoint);
     if (response.statusCode != 200) {
       this.setState(() {
@@ -35,6 +36,12 @@ class _SchedulePageState extends State<SchedulePage> {
       });
     }
     final responseJson = json.decode(response.body);
+
+    _scaffoldKey.currentState?.showSnackBar(
+      new SnackBar(
+          content: const Text('Finish Loading')
+      ),
+    );
 
     this.setState(() {
       debugPrint('Finish fetching');
@@ -73,12 +80,10 @@ class _SchedulePageState extends State<SchedulePage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Overlay(
-        initialEntries:<OverlayEntry>[
-          new OverlayEntry(
-              builder: (context) => this.buildLayer()
-          ),
-        ]
+    return new RefreshIndicator(
+      key: _refreshIndicatorKey,
+      onRefresh: this.fetchConference,
+      child: this.buildLayer(),
     );
   }
 
@@ -87,9 +92,10 @@ class _SchedulePageState extends State<SchedulePage> {
       return new LoadingView(this.buildRefreshButton());
     }
 
-    return new DefaultTabController(
+    final tabs = new DefaultTabController(
         length: this.conference.days.length,
         child: new Scaffold(
+            key: _scaffoldKey,
             floatingActionButton: this.buildRefreshButton(),
             body: new NestedScrollView(
               headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -108,5 +114,19 @@ class _SchedulePageState extends State<SchedulePage> {
             )
         )
     );
+
+    final navigator = new Navigator(
+        initialRoute: '/',
+        onGenerateRoute: (RouteSettings setting) {
+          if (setting.name == '/') {
+            return new PageRouteBuilder(
+                pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) => tabs,
+            );
+            return null;
+          }
+        }
+    );
+
+    return navigator;
   }
 }

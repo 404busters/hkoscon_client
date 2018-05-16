@@ -91,17 +91,23 @@ class Speaker {
   const Speaker({
     this.name,
     this.community,
-    this.country
+    this.country,
+    this.description,
+    this.thumbnail,
   });
 
   Speaker.fromJson(Map<String, dynamic> data):
         this(
-          name: data['name'],
-          community: data['community'],
-          country: data['country']
+        name: data['name'],
+        community: data['community'],
+        country: data['country'],
+        description: data['description'],
+        thumbnail: data['thumbnail'],
       );
 
   final String name;
   final String community;
   final String country;
+  final String description;
+  final String thumbnail;
 }
