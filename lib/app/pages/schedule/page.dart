@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../const.dart';
 import './state.dart';
 import './timetable.dart';
@@ -25,7 +27,46 @@ class _SchedulePageState extends State<SchedulePage> {
   @override
   void initState() {
     super.initState();
+    this.readTimetable()
+    .then((String data) {
+      if (data != null) {
+        this.setState(() {
+          debugPrint('Load local');
+          final responseJson = json.decode(data);
+          this.conference = Conference.fromJson(responseJson);
+        });
+      }
+    });
     this.fetchConference();
+  }
+
+  Future<String> get _appPath async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
+
+  Future<File> get _dataFile async {
+    final path = await _appPath;
+    return new File('$path/timetable.json');
+  }
+
+  Future<File> writeTimetable(String json) async {
+    final file = await _dataFile;
+    // Write the file
+    return file.writeAsString(json);
+  }
+
+  Future<String> readTimetable() async {
+    try {
+      final file = await _dataFile;
+
+      // Read the file
+      return file.readAsString();
+    } catch (e) {
+
+      // If we encounter an error, return null
+      return null;
+    }
   }
 
   Future<Null> fetchConference() async {
@@ -35,7 +76,15 @@ class _SchedulePageState extends State<SchedulePage> {
       this.setState(() {
         this.isError = true;
       });
+      return;
     }
+    this.writeTimetable(response.body)
+    .then((file) {
+      debugPrint('Save local');
+    })
+    .catchError((e) {
+      debugPrint(e);
+    });
     final responseJson = json.decode(response.body);
 
     _scaffoldKey.currentState?.showSnackBar(
