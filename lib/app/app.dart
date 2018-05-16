@@ -5,11 +5,10 @@ import 'theme.dart' show AppTheme;
 
 import 'container.dart' show AppContainer;
 import 'router/router.dart' show ContainerBuilder, Router;
-import 'pages/home/page.dart' show HomePage;
 import 'pages/schedule/page.dart' show SchedulePage;
 
 final routes = <String, WidgetBuilder>{
-  '/': (BuildContext context) => new HomePage(),
+  '/': (BuildContext context) => new SchedulePage(),
   '/schedule': (BuildContext context) => new SchedulePage(),
 };
 
