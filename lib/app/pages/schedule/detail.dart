@@ -115,7 +115,7 @@ class _MetaCard extends StatelessWidget {
                   _MetaRow(
                     Icons.event,
                     'Time',
-                    '${this.date} (Day ${this.day}) ~ ${this.startTime} - ${this.endTime}',
+                    '${this.date} (Day ${this.day})\n${this.startTime} - ${this.endTime}',
                   ),
                   _MetaRow(
                     Icons.message,
