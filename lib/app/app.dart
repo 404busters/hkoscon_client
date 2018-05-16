@@ -22,11 +22,20 @@ class HKOSConClientApp extends StatelessWidget {
       builder: builder,
     );
 
+    final navigator = new Navigator(
+        initialRoute: '/',
+        onGenerateRoute: (RouteSettings setting) {
+          return new PageRouteBuilder(
+            pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) => router,
+          );
+        }
+    );
+
+
     return new MaterialApp(
         title: AppTitle,
         theme: AppTheme,
-        home: router
+        home: navigator,
     );
-
   }
 }

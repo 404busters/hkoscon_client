@@ -115,18 +115,6 @@ class _SchedulePageState extends State<SchedulePage> {
         )
     );
 
-    final navigator = new Navigator(
-        initialRoute: '/',
-        onGenerateRoute: (RouteSettings setting) {
-          if (setting.name == '/') {
-            return new PageRouteBuilder(
-                pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) => tabs,
-            );
-            return null;
-          }
-        }
-    );
-
-    return navigator;
+    return tabs;
   }
 }

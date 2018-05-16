@@ -96,7 +96,7 @@ class _MetaCard extends StatelessWidget {
           children: <Widget>[
             new Text(this.title,
               style: const TextStyle(
-                fontSize: 20.0,
+                fontSize: 24.0,
                 color: PrimaryColor,
                 fontWeight: FontWeight.w600,
               ),
@@ -109,7 +109,7 @@ class _MetaCard extends StatelessWidget {
                   _MetaRow(
                     Icons.event,
                     'Time',
-                    '${this.date} (Day ${this.day})\n${this.startTime} - ${this.endTime}',
+                    '${this.date} (Day ${this.day})${this.startTime} - ${this.endTime}',
                   ),
                   _MetaRow(
                     Icons.explore,
@@ -153,11 +153,7 @@ class _MetaRow extends StatelessWidget {
             padding: const EdgeInsets.only(right: 8.0),
             child: new Icon(this.icon, color: Colors.black87,),
           ),
-          new SizedBox(
-            width: 80.0,
-            child: new Text(this.title),
-          ),
-          new Expanded(child: new Text(this.content)),
+          new FittedBox(child: new Text(this.content)),
         ],
       ),
     );
@@ -186,7 +182,7 @@ class _AbstractCard extends StatelessWidget {
           children: <Widget>[
             const Text('Abstract',
               style: const TextStyle(
-                fontSize: 24.0,
+                fontSize: 20.0,
                 color: PrimaryColor,
               ),
             ),
