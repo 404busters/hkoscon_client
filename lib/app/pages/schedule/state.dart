@@ -73,7 +73,7 @@ class Event {
         speakers: data['speakers']
             .map<Speaker>((data) => Speaker.fromJson(data)).toList(),
         topic: data['topic'] as bool,
-        display: data['dispaly'] as String,
+        display: data['display'],
         description: data['description'] as String,
         language: data['language'] as String,
         level: data['level'] as String,
