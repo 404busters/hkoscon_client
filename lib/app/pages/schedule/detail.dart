@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'state.dart';
 import '../../const.dart';
@@ -7,6 +6,28 @@ String cleanHTML(String html) {
   return html
       .replaceAll(new RegExp(r'<[/\w\s]+>'), '')
       .replaceAll(new RegExp(r'&nbsp;'), '');
+}
+
+class Separator extends StatelessWidget {
+  const Separator();
+
+  @override
+  Widget build(BuildContext context) {
+    return new SizedBox(
+      height: 0.0,
+      child: new Center(
+        child: new Container(
+          height: 0.0,
+          margin: new EdgeInsetsDirectional.only(start: 0.0),
+          decoration: new BoxDecoration(
+            border: new Border(
+              bottom: Divider.createBorderSide(context, color: PrimaryColor, width: 2.0),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class DetailView extends StatelessWidget {
@@ -20,7 +41,12 @@ class DetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(),
+      appBar: new AppBar(
+        title: new Text(
+          event.display,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
       body: this._buildList(context),
     );
   }
@@ -55,10 +81,12 @@ class DetailView extends StatelessWidget {
         language: event.language,
         level: event.level,
       ),
+      const Separator(),
       new _AbstractCard(this.event.description),
     ];
 
     this.event.speakers.forEach((speaker) {
+      widgets.add(const Separator());
       widgets.add(new _SpeakerCard(speaker));
     });
 
