@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:flutter/material.dart';
 import '../../const.dart' show PrimaryColor;
-import './state.dart' show Conference;
+import './state.dart';
 import './timetable.dart';
 
 const _endpoint = 'https://hkoscon.ddns.net/api/v1/days/HKOSCon%202018';
@@ -39,6 +39,32 @@ class _SchedulePageState extends State<SchedulePage> {
       debugPrint('Finish fetching');
       this.widget.conference = Conference.fromJson(responseJson);
     });
+  }
+
+  Widget buildDay(Day day) {
+    return new CustomScrollView(
+      key: new PageStorageKey<String>(day.date),
+      slivers: <Widget>[
+        new SliverOverlapInjector(
+          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+        ),
+        new SliverPadding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: 16.0,
+          ),
+          sliver: new SliverFixedExtentList(
+              itemExtent: 40.0,
+              delegate: new SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                    return DayView(day);
+                  },
+                  childCount: this.widget.conference.days.length
+              )
+          ),
+        ),
+      ],
+    );
   }
 
   Widget buildBody() {
@@ -114,11 +140,21 @@ class _SchedulePageState extends State<SchedulePage> {
     return new DefaultTabController(
         length: this.widget.conference.days.length,
         child: new Scaffold(
-          appBar: new AppBar(
-            title: new TabBar(tabs: this.buildTabs()),
-          ),
-          floatingActionButton: this.buildRefreshButton(),
-          body: this.buildBody(),
+            floatingActionButton: this.buildRefreshButton(),
+            body: new NestedScrollView(
+              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                return <Widget>[
+                  new SliverOverlapAbsorber(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                    child: new SliverAppBar(
+                      title: new TabBar(tabs: this.buildTabs()), // This is the title in the app bar.
+                      forceElevated: innerBoxIsScrolled,
+                    ),
+                  )
+                ];
+              },
+              body: this.buildBody(),
+            )
         )
     );
   }

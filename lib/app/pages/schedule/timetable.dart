@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'state.dart';
+import '../../const.dart';
 
 class DayView extends StatelessWidget {
   final Day day;
@@ -8,8 +9,90 @@ class DayView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Container(
-      margin: const EdgeInsets.all(20.0),
-      child: new Text('${this.day.day} (${this.day.date})'),
+      margin: const EdgeInsets.symmetric(vertical: 20.0),
+      child: new ListView(
+        children: day.timeslots
+            .map((timeslot) => TimeslotView(timeslot))
+            .toList(growable: false),
+      ),
     );
+  }
+}
+
+class TimeslotView extends StatelessWidget {
+  final Timeslot timeslot;
+  const TimeslotView(this.timeslot);
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child: Column(
+            children: this.buildChildren(),
+          ),
+        )
+    );
+  }
+
+  List<Widget> buildChildren() {
+    final List<Widget> widgets = this.timeslot.events
+        .map<Widget>((event) => EventView(event))
+        .toList(growable: true);
+
+    widgets.insert(0, Text('${timeslot.startTime} - ${timeslot.endTime}',
+      textAlign: TextAlign.left,
+      style: const TextStyle(
+        color: PrimaryColor,
+        fontSize: 20.0,
+      ),
+    ));
+
+    return widgets;
+  }
+}
+
+class EventView extends StatelessWidget {
+  final Event event;
+  const EventView(this.event);
+
+  @override
+  Widget build(BuildContext context) {
+    debugPrint((event.display == null).toString());
+    return new Card(
+        child: new Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: new Row(
+            children: <Widget>[
+              new CircleAvatar(child: new VenueView(event.venue)),
+              new Expanded(
+                child: new Padding(
+                  padding: const EdgeInsets.only(left: 4.0),
+                  child: new Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      new Text(event.display != null ? event.display : '???'),
+                    ],
+                  )
+                ),
+              ),
+            ],
+          ),
+        )
+    );
+  }
+}
+
+class VenueView extends StatelessWidget {
+  final Venue venue;
+  const VenueView(this.venue);
+
+  @override
+  Widget build(BuildContext context) {
+    if (this.venue.name.length == 0) {
+      return new CircleAvatar(child: const Text('SP'));
+    }
+    final String key = this.venue.name.substring(16, 17);
+    return new CircleAvatar(child: new Text('H${key}'));
   }
 }
