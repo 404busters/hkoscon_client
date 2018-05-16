@@ -81,9 +81,13 @@ class DetailView extends StatelessWidget {
         language: event.language,
         level: event.level,
       ),
-      const Separator(),
-      new _AbstractCard(this.event.description),
+
     ];
+
+    if (this.event.description.length > 0) {
+      widgets.add(const Separator());
+      widgets.add(new _AbstractCard(this.event.description));
+    }
 
     this.event.speakers.forEach((speaker) {
       widgets.add(const Separator());
@@ -152,7 +156,7 @@ class _MetaCard extends StatelessWidget {
                 _MetaRow(
                   Icons.network_check,
                   'Level',
-                  this.level,
+                  this.level.length > 0 ? this.level : 'TBD',
                 ),
               ],
             ),
@@ -246,7 +250,7 @@ class _SpeakerCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           new SizedBox(
-            height: 184.0,
+            height: 250.0,
             child: new Stack(
               children: <Widget>[
                 new Positioned.fill(

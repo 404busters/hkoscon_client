@@ -117,7 +117,6 @@ class EventView extends StatelessWidget {
     return new InkResponse(
       child: this._buildCard(),
       onTap: () {
-        debugPrint('Tap');
         Navigator.push(context, new MaterialPageRoute(
           builder: (context) => new DetailView(event, this.startTime, this.endTime, this.date, this.day),
         ));
