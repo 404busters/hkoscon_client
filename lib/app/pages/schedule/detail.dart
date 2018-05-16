@@ -151,7 +151,7 @@ class _MetaCard extends StatelessWidget {
                 _MetaRow(
                   Icons.message,
                   'Language',
-                  this.language,
+                  this.language.length > 0 ? this.language : '??',
                 ),
                 _MetaRow(
                   Icons.network_check,
@@ -255,7 +255,7 @@ class _SpeakerCard extends StatelessWidget {
               children: <Widget>[
                 new Positioned.fill(
                   child: new Image.network(
-                    this.speaker.thumbnail,
+                    this.speaker.thumbnail.length > 0 ? this.speaker.thumbnail : 'https://file.hkoscon.org/speakers/2017/unknown.png',
                     fit: BoxFit.cover,
                   ),
                 ),
