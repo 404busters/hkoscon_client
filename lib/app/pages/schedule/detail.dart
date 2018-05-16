@@ -94,15 +94,9 @@ class _MetaCard extends StatelessWidget {
         child:  new Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            new Text(this.venue,
-                style: const TextStyle(
-                  color: PrimaryColor,
-                  fontWeight: FontWeight.w600,
-                )
-            ),
             new Text(this.title,
               style: const TextStyle(
-                fontSize: 24.0,
+                fontSize: 20.0,
                 color: PrimaryColor,
                 fontWeight: FontWeight.w600,
               ),
@@ -116,6 +110,11 @@ class _MetaCard extends StatelessWidget {
                     Icons.event,
                     'Time',
                     '${this.date} (Day ${this.day})\n${this.startTime} - ${this.endTime}',
+                  ),
+                  _MetaRow(
+                    Icons.explore,
+                    'Venue',
+                    this.venue,
                   ),
                   _MetaRow(
                     Icons.message,
@@ -258,10 +257,13 @@ class _SpeakerCard extends StatelessWidget {
                 ],
               ),
             ),
-            new Text(
-              '${this.speaker.community} / ${this.speaker.country}',
-              style: const TextStyle(
-                fontSize: 18.0,
+            new Padding(
+              padding: const EdgeInsets.only(top: 12.0),
+              child: new Text(
+                '${this.speaker.community} / ${this.speaker.country}',
+                style: const TextStyle(
+                  fontSize: 18.0,
+                ),
               ),
             ),
             new Padding (
