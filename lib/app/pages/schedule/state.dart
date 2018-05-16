@@ -57,6 +57,7 @@ class Event {
     this.language,
     this.level,
     this.speakers,
+    this.internal,
   });
 
   final bool topic;
@@ -66,6 +67,7 @@ class Event {
   final String language;
   final String level;
   final List<Speaker> speakers;
+  final String internal;
 
   Event.fromJson(Map<String, dynamic> data):
         this(
@@ -77,6 +79,7 @@ class Event {
         description: data['description'] as String,
         language: data['language'] as String,
         level: data['level'] as String,
+        internal: data['internal'],
       );
 }
 

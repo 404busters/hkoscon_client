@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'state.dart';
 import '../../const.dart';
 import 'detail.dart';
+
+FirebaseAnalytics analytics = new FirebaseAnalytics();
 
 class DayView extends StatelessWidget {
   final Day day;
@@ -117,6 +120,15 @@ class EventView extends StatelessWidget {
     return new InkResponse(
       child: this._buildCard(),
       onTap: () {
+        final uri = Uri.parse(this.event.internal);
+        final path = uri.path;
+        final id = path.substring(7);
+        debugPrint(id);
+        analytics.logViewItem(
+            itemId: id,
+            itemName: this.event.display,
+            itemCategory: 'Topic'
+        );
         Navigator.push(context, new MaterialPageRoute(
           builder: (context) => new DetailView(event, this.startTime, this.endTime, this.date, this.day),
         ));
