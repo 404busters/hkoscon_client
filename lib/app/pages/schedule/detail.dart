@@ -184,7 +184,7 @@ class _MetaRow extends StatelessWidget {
             padding: const EdgeInsets.only(right: 8.0),
             child: new Icon(this.icon, color: Colors.black87,),
           ),
-          new FittedBox(child: new Text(this.content)),
+          new FittedBox(child: new Text(this.content.length > 0 ?this.content : '??')),
         ],
       ),
     );
