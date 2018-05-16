@@ -29,6 +29,7 @@ class TimeslotView extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: this.buildChildren(),
           ),
         )
@@ -40,13 +41,16 @@ class TimeslotView extends StatelessWidget {
         .map<Widget>((event) => EventView(event))
         .toList(growable: true);
 
-    widgets.insert(0, Text('${timeslot.startTime} - ${timeslot.endTime}',
-      textAlign: TextAlign.left,
-      style: const TextStyle(
-        color: PrimaryColor,
-        fontSize: 20.0,
-      ),
-    ));
+    widgets.insert(0, Padding(
+      padding: const EdgeInsets.only(left: 8.0),
+        child:Text('${timeslot.startTime} - ${timeslot.endTime}',
+          textAlign: TextAlign.left,
+          style: const TextStyle(
+            color: PrimaryColor,
+            fontSize: 20.0,
+            fontWeight: FontWeight.w500,
+          ),
+        )));
 
     return widgets;
   }
@@ -58,22 +62,28 @@ class EventView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint((event.display == null).toString());
+    final topic = new Text(event.display != null ? event.display : '???');
     return new Card(
         child: new Padding(
           padding: const EdgeInsets.all(16.0),
           child: new Row(
             children: <Widget>[
-              new CircleAvatar(child: new VenueView(event.venue)),
+              new VenueView(event.venue),
               new Expanded(
                 child: new Padding(
-                  padding: const EdgeInsets.only(left: 4.0),
-                  child: new Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      new Text(event.display != null ? event.display : '???'),
-                    ],
-                  )
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: event.topic && event.speakers.length > 0 ? new Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        topic,
+                        new Text(
+                          '${event.speakers.map((speaker) => speaker.name).join(' / ')}',
+                          style: const TextStyle(
+                            fontSize: 12.0,
+                          ),
+                        )
+                      ],
+                    ) : topic
                 ),
               ),
             ],
