@@ -89,49 +89,47 @@ class _MetaCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Card(
-      child: new Padding(
-        padding: const EdgeInsets.all(16.0),
-        child:  new Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            new Text(this.title,
-              style: const TextStyle(
-                fontSize: 24.0,
-                color: PrimaryColor,
-                fontWeight: FontWeight.w600,
-              ),
+    return new Padding(
+      padding: const EdgeInsets.all(16.0),
+      child:  new Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          new Text(this.title,
+            style: const TextStyle(
+              fontSize: 24.0,
+              color: PrimaryColor,
+              fontWeight: FontWeight.w600,
             ),
-            new Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0.0),
-              child: new Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _MetaRow(
-                    Icons.event,
-                    'Time',
-                    '${this.date} (Day ${this.day}) ~ ${this.startTime} - ${this.endTime}',
-                  ),
-                  _MetaRow(
-                    Icons.explore,
-                    'Venue',
-                    this.venue,
-                  ),
-                  _MetaRow(
-                    Icons.message,
-                    'Language',
-                    this.language,
-                  ),
-                  _MetaRow(
-                    Icons.network_check,
-                    'Level',
-                    this.level,
-                  ),
-                ],
-              ),
+          ),
+          new Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0.0),
+            child: new Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _MetaRow(
+                  Icons.event,
+                  'Time',
+                  '${this.date} (Day ${this.day}) ~ ${this.startTime} - ${this.endTime}',
+                ),
+                _MetaRow(
+                  Icons.explore,
+                  'Venue',
+                  this.venue,
+                ),
+                _MetaRow(
+                  Icons.message,
+                  'Language',
+                  this.language,
+                ),
+                _MetaRow(
+                  Icons.network_check,
+                  'Level',
+                  this.level,
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -174,30 +172,27 @@ class _AbstractCard extends StatelessWidget {
   }
 
   Widget _buildCard() {
-    return new Card(
-      elevation: 2.0,
-      child: new Container(
-        padding: const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
-        child: new Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Text('Abstract',
+    return new Container(
+      padding: const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
+      child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const Text('Abstract',
+            style: const TextStyle(
+              fontSize: 20.0,
+              color: PrimaryColor,
+            ),
+          ),
+          new Padding (
+            padding: const EdgeInsets.only(top: 12.0),
+            child: new Text(
+              cleanHTML(abstract),
               style: const TextStyle(
-                fontSize: 20.0,
-                color: PrimaryColor,
+                height: 1.2,
               ),
             ),
-            new Padding (
-              padding: const EdgeInsets.only(top: 12.0),
-              child: new Text(
-                cleanHTML(abstract),
-                style: const TextStyle(
-                  height: 1.2,
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -217,63 +212,60 @@ class _SpeakerCard extends StatelessWidget {
   }
 
   Widget _buildCard() {
-    return new Card(
-      elevation: 2.0,
-      child: new Container(
-        padding: const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
-        child: new Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            new SizedBox(
-              height: 184.0,
-              child: new Stack(
-                children: <Widget>[
-                  new Positioned.fill(
-                    child: new Image.network(
-                      this.speaker.thumbnail,
-                      fit: BoxFit.cover,
+    return new Container(
+      padding: const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
+      child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          new SizedBox(
+            height: 184.0,
+            child: new Stack(
+              children: <Widget>[
+                new Positioned.fill(
+                  child: new Image.network(
+                    this.speaker.thumbnail,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                new Positioned(
+                  bottom: 16.0,
+                  left: 16.0,
+                  right: 16.0,
+                  child: new FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: new Text(
+                        this.speaker.name,
+                        style: const TextStyle(
+                          color: SecondaryColor,
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.w700,
+                        )
                     ),
                   ),
-                  new Positioned(
-                    bottom: 16.0,
-                    left: 16.0,
-                    right: 16.0,
-                    child: new FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerLeft,
-                      child: new Text(
-                          this.speaker.name,
-                          style: const TextStyle(
-                            color: SecondaryColor,
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.w700,
-                          )
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            new Padding(
-              padding: const EdgeInsets.only(top: 12.0),
-              child: new Text(
-                '${this.speaker.community} / ${this.speaker.country}',
-                style: const TextStyle(
-                  fontSize: 18.0,
                 ),
+              ],
+            ),
+          ),
+          new Padding(
+            padding: const EdgeInsets.only(top: 12.0),
+            child: new Text(
+              '${this.speaker.community} / ${this.speaker.country}',
+              style: const TextStyle(
+                fontSize: 18.0,
               ),
             ),
-            new Padding (
-              padding: const EdgeInsets.only(top: 12.0),
-              child: new Text(
-                cleanHTML(this.speaker.description),
-                style: const TextStyle(
-                  height: 1.2,
-                ),
+          ),
+          new Padding (
+            padding: const EdgeInsets.only(top: 12.0),
+            child: new Text(
+              cleanHTML(this.speaker.description),
+              style: const TextStyle(
+                height: 1.2,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
