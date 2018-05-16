@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'const.dart' show PrimaryColor, SecondaryColor, AppTitle;
 import 'about.dart' show AboutApp;
-import 'router/router.dart' show Router;
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer(this.items);
@@ -40,8 +39,7 @@ class AppDrawer extends StatelessWidget {
       leading: new Icon(item.icon),
       title: new Text(item.title),
       onTap: () {
-        Navigator.pop(context);
-        Router.of(context).replace(item.route);
+        Navigator.pushNamed(context, item.route);
       },
     ));
   }

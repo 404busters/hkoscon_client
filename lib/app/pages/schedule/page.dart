@@ -6,6 +6,7 @@ import '../../const.dart';
 import './state.dart';
 import './timetable.dart';
 import './component.dart';
+import '../../drawer.dart' show DrawerItem, AppDrawer;
 
 const _endpoint = 'https://hkoscon.org/2018/data/timetable.json';
 
@@ -95,26 +96,33 @@ class _SchedulePageState extends State<SchedulePage> {
     final tabs = new DefaultTabController(
         length: this.conference.days.length,
         child: new Scaffold(
-            key: _scaffoldKey,
-            floatingActionButton: this.buildRefreshButton(),
-            body: new NestedScrollView(
-              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                return <Widget>[
-                  new SliverOverlapAbsorber(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                    child: new SliverAppBar(
-                      elevation: 2.0,
-                      title: new TabBar(tabs: this._buildTabs()), // This is the title in the app bar.
-                      forceElevated: innerBoxIsScrolled,
-                    ),
-                  )
-                ];
-              },
-              body: this._buildBody(),
-            )
+          key: _scaffoldKey,
+          appBar: new AppBar(
+            elevation: 2.0,
+            title: const Text(
+                AppTitle,
+                style: const TextStyle(
+                    color: SecondaryColor
+                )
+            ),
+            bottom: new TabBar(tabs: this._buildTabs()), // This is the title in the app bar.
+          ),
+          floatingActionButton: this.buildRefreshButton(),
+          body: this._buildBody(),
+          drawer: this._buildDrawer(),
         )
     );
 
     return tabs;
+  }
+
+  Widget _buildDrawer() {
+    return new AppDrawer(<DrawerItem>[
+      new DrawerItem(
+        title: 'Schedule',
+        icon: Icons.event,
+        route: '/',
+      )
+    ]);
   }
 }
