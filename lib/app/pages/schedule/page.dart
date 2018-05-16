@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:http/http.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:firebase_performance/firebase_performance.dart';
 import '../../const.dart';
 import './state.dart';
 import './timetable.dart';
@@ -27,16 +28,22 @@ class _SchedulePageState extends State<SchedulePage> {
   @override
   void initState() {
     super.initState();
-    this.readTimetable()
-    .then((String data) {
-      if (data != null) {
-        this.setState(() {
-          debugPrint('Load local');
-          final responseJson = json.decode(data);
-          this.conference = Conference.fromJson(responseJson);
-        });
-      }
-    });
+    final loadFileTrace = FirebasePerformance.instance.newTrace('Load local');
+    loadFileTrace
+        .start()
+        .then((_) => this.readTimetable())
+        .then(
+            (String data) {
+          loadFileTrace.stop();
+          if (data != null) {
+            this.setState(() {
+              debugPrint('Load local');
+              final responseJson = json.decode(data);
+              this.conference = Conference.fromJson(responseJson);
+            });
+          }
+        }
+    );
     this.fetchConference();
   }
 
@@ -51,9 +58,14 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   Future<File> writeTimetable(String json) async {
+    final storeFileTrace = FirebasePerformance.instance.newTrace('Store local');
+    await storeFileTrace.start();
     final file = await _dataFile;
     // Write the file
-    return file.writeAsString(json);
+    final result = await file.writeAsString(json);
+    await storeFileTrace.stop();
+    debugPrint('Store timetable');
+    return result;
   }
 
   Future<String> readTimetable() async {
@@ -70,6 +82,8 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   Future<Null> fetchConference() async {
+    final httpTrace = await FirebasePerformance.startTrace('fetch timetable');
+    
     _refreshIndicatorKey.currentState.show();
     final Response response = await get(_endpoint);
     if (response.statusCode != 200) {
@@ -78,13 +92,8 @@ class _SchedulePageState extends State<SchedulePage> {
       });
       return;
     }
-    this.writeTimetable(response.body)
-    .then((file) {
-      debugPrint('Save local');
-    })
-    .catchError((e) {
-      debugPrint(e);
-    });
+
+    this.writeTimetable(response.body);
     final responseJson = json.decode(response.body);
 
     _scaffoldKey.currentState?.showSnackBar(
@@ -93,6 +102,7 @@ class _SchedulePageState extends State<SchedulePage> {
       ),
     );
 
+    await httpTrace.stop();
     this.setState(() {
       debugPrint('Finish fetching');
       this.conference = Conference.fromJson(responseJson);
