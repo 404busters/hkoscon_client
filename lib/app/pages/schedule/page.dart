@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:flutter/material.dart';
-import '../../const.dart' show PrimaryColor;
+import '../../const.dart';
 import './state.dart';
 import './timetable.dart';
 
@@ -110,7 +110,8 @@ class _SchedulePageState extends State<SchedulePage> {
   Widget buildRefreshButton() {
     return new FloatingActionButton(
       onPressed: () {this.fetchConference();},
-      foregroundColor: PrimaryColor,
+      foregroundColor: const Color.fromRGBO(255, 255, 255, 1.0),
+      backgroundColor: PrimaryColor,
       child: const Icon(Icons.autorenew),
     );
   }
@@ -147,6 +148,7 @@ class _SchedulePageState extends State<SchedulePage> {
                   new SliverOverlapAbsorber(
                     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                     child: new SliverAppBar(
+                      elevation: 2.0,
                       title: new TabBar(tabs: this.buildTabs()), // This is the title in the app bar.
                       forceElevated: innerBoxIsScrolled,
                     ),

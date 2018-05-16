@@ -27,7 +27,7 @@ class TimeslotView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          padding: const EdgeInsets.only(bottom: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: this.buildChildren(),
@@ -42,13 +42,13 @@ class TimeslotView extends StatelessWidget {
         .toList(growable: true);
 
     widgets.insert(0, Padding(
-      padding: const EdgeInsets.only(left: 8.0),
+        padding: const EdgeInsets.only(left: 8.0),
         child:Text('${timeslot.startTime} - ${timeslot.endTime}',
           textAlign: TextAlign.left,
           style: const TextStyle(
             color: PrimaryColor,
             fontSize: 20.0,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w700,
           ),
         )));
 
@@ -62,7 +62,7 @@ class EventView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final topic = new Text(event.display != null ? event.display : '???');
+    var topic = event.display != null ? event.display : '???';
     return new Card(
         child: new Padding(
           padding: const EdgeInsets.all(16.0),
@@ -75,15 +75,29 @@ class EventView extends StatelessWidget {
                     child: event.topic && event.speakers.length > 0 ? new Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        topic,
-                        new Text(
-                          '${event.speakers.map((speaker) => speaker.name).join(' / ')}',
+                        Text(
+                          topic,
                           style: const TextStyle(
-                            fontSize: 12.0,
+                            height: 1.2,
                           ),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              '${event.speakers.map((speaker) => speaker.name).join(' / ')}',
+                              style: const TextStyle(
+                                fontSize: 12.0,
+                              ),
+                            )
                         )
                       ],
-                    ) : topic
+                    )
+                        :
+                    new Text(
+                        topic,
+                        style: const TextStyle(fontSize: 16.0)
+                    )
+
                 ),
               ),
             ],
