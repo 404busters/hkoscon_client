@@ -54,7 +54,7 @@ PODS:
 DEPENDENCIES:
   - firebase_analytics (from `Pods/.symlinks/plugins/firebase_analytics/ios`)
   - firebase_performance (from `Pods/.symlinks/plugins/firebase_performance/ios`)
-  - Flutter (from `Pods/.symlinks/flutter/ios`)
+  - Flutter (from `Pods/.symlinks/flutter/ios-release`)
   - path_provider (from `Pods/.symlinks/plugins/path_provider/ios`)
 
 SPEC REPOS:
@@ -76,7 +76,7 @@ EXTERNAL SOURCES:
   firebase_performance:
     :path: Pods/.symlinks/plugins/firebase_performance/ios
   Flutter:
-    :path: Pods/.symlinks/flutter/ios
+    :path: Pods/.symlinks/flutter/ios-release
   path_provider:
     :path: Pods/.symlinks/plugins/path_provider/ios
 
