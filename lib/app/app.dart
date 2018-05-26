@@ -64,7 +64,7 @@ class HKOSConClientApp extends StatelessWidget {
 
   Widget _buildLanding() {
     return new MaterialApp(
-      supportedLocales: const <Locale>[const Locale('en', 'GB')],
+      supportedLocales: supportedLocales,
       title: appDisplayTitle,
       theme: appTheme,
       home: new Scaffold(
