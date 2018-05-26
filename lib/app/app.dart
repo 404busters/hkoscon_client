@@ -53,7 +53,7 @@ class HKOSConClientApp extends StatelessWidget {
           ),
           actions: <Widget>[
             new FlatButton(
-                child: const Text('OK'),
+                child: const Text('OK', style: const TextStyle(color: PrimaryColor),),
                 onPressed: () { exit(0); }
             ),
           ],
