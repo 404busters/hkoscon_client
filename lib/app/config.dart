@@ -33,7 +33,7 @@ class ConfigState extends State<ConfigWrapper> {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      supportedLocales: const <Locale>[const Locale('en', 'GB')],
+      supportedLocales: supportedLocales,
       title: appDisplayTitle,
       routes: routes,
       theme: appTheme,

@@ -10,6 +10,7 @@ import '../../config.dart';
 import '../../bibliothiki/store.dart';
 import 'component.dart';
 import 'tab.dart';
+import '../../widgets/drawer.dart';
 
 class SchedulePage extends StatefulWidget {
   @override

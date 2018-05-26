@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../widgets/drawer.dart';
 import '../../const.dart';
 
 class RefreshButton extends StatelessWidget {
@@ -16,21 +15,6 @@ class RefreshButton extends StatelessWidget {
       backgroundColor: PrimaryColor,
       child: const Icon(Icons.autorenew),
     );
-  }
-}
-
-class PageDrawer extends StatelessWidget {
-  const PageDrawer();
-
-  @override
-  Widget build(BuildContext context) {
-    return new AppDrawer(<DrawerItem>[
-      new DrawerItem(
-        title: 'Schedule',
-        icon: Icons.event,
-        route: '/',
-      )
-    ]);
   }
 }
 

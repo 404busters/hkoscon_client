@@ -2,6 +2,22 @@ import 'package:flutter/material.dart';
 import '../const.dart' show PrimaryColor, SecondaryColor, AppTitle;
 import 'about.dart' show AboutApp;
 
+class PageDrawer extends StatelessWidget {
+  const PageDrawer();
+
+  @override
+  Widget build(BuildContext context) {
+    return new AppDrawer(<DrawerItem>[
+      new DrawerItem(
+        title: 'Schedule',
+        icon: Icons.event,
+        route: '/',
+      )
+    ]);
+  }
+}
+
+
 class AppDrawer extends StatelessWidget {
   const AppDrawer(this.items);
 

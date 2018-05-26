@@ -6,7 +6,7 @@ class AboutApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const AboutListTile(
       applicationName: appDisplayTitle,
-      applicationVersion: Version,
+      applicationVersion: appVersion,
     );
   }
 }
