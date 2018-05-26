@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'const.dart' show PrimaryColor, SecondaryColor, AppTitle;
+import '../const.dart' show PrimaryColor, SecondaryColor, AppTitle;
 import 'about.dart' show AboutApp;
 
 class AppDrawer extends StatelessWidget {

@@ -3,9 +3,10 @@ description: HKOSCon Client App
 
 dependencies:
   http: "^0.11.3+16"
-  path_provider: "^0.4.0"
-  firebase_analytics: "^0.3.3"
+  path_provider: ^0.4.0
+  firebase_analytics: ^0.3.3
   firebase_performance: ^0.0.1
+  firebase_remote_config: ^0.0.2
   flutter:
     sdk: flutter
 

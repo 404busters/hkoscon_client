@@ -1,4 +1,37 @@
 import 'package:flutter/material.dart';
+import '../../widgets/drawer.dart';
+import '../../const.dart';
+
+class RefreshButton extends StatelessWidget {
+  const RefreshButton(this._callback);
+
+  final VoidCallback _callback;
+
+  @override
+  Widget build(BuildContext context) {
+    return new FloatingActionButton(
+      onPressed: _callback,
+      foregroundColor: const Color.fromRGBO(255, 255, 255, 1.0),
+      backgroundColor: PrimaryColor,
+      child: const Icon(Icons.autorenew),
+    );
+  }
+}
+
+class PageDrawer extends StatelessWidget {
+  const PageDrawer();
+
+  @override
+  Widget build(BuildContext context) {
+    return new AppDrawer(<DrawerItem>[
+      new DrawerItem(
+        title: 'Schedule',
+        icon: Icons.event,
+        route: '/',
+      )
+    ]);
+  }
+}
 
 class ErrorView extends StatelessWidget {
   const ErrorView();
@@ -21,7 +54,6 @@ class ErrorView extends StatelessWidget {
     );
   }
 }
-
 
 class LoadingView extends StatelessWidget {
   const LoadingView(this.refreshButton);

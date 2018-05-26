@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'state.dart';
 import '../../const.dart';
-
-String cleanHTML(String html) {
-  return html
-      .replaceAll(new RegExp(r'<[/\w\s]+>'), '')
-      .replaceAll(new RegExp(r'&nbsp;'), '');
-}
+import '../../bibliothiki/html.dart';
 
 class Separator extends StatelessWidget {
   const Separator();

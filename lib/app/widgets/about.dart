@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'const.dart' show Version;
+import '../const.dart';
 
 class AboutApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const AboutListTile(
-      applicationName: 'HKOSCon Mobile',
+      applicationName: appDisplayTitle,
       applicationVersion: Version,
     );
   }

@@ -3,15 +3,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 import '../../const.dart';
 import './state.dart';
-import './timetable.dart';
-import './component.dart';
-import '../../drawer.dart' show DrawerItem, AppDrawer;
-
-const _endpoint = 'https://hkoscon.org/2018/data/timetable.json';
+import '../../config.dart';
+import '../../bibliothiki/store.dart';
+import 'component.dart';
+import 'tab.dart';
 
 class SchedulePage extends StatefulWidget {
   @override
@@ -19,15 +17,21 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
+  final Store store = const Store();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
 
-  Conference conference;
-  bool isError = false;
+  Conference _conference;
+  bool _isError = false;
 
   @override
   void initState() {
     super.initState();
+    this.loadFromLocal();
+    this.fetchConference();
+  }
+
+  void loadFromLocal() {
     final loadFileTrace = FirebasePerformance.instance.newTrace('Load local');
     loadFileTrace
         .start()
@@ -39,30 +43,17 @@ class _SchedulePageState extends State<SchedulePage> {
             this.setState(() {
               debugPrint('Load local');
               final responseJson = json.decode(data);
-              this.conference = Conference.fromJson(responseJson);
+              this._conference = Conference.fromJson(responseJson);
             });
           }
         }
     );
-    this.fetchConference();
-  }
-
-  Future<String> get _appPath async {
-    final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
-  }
-
-  Future<File> get _dataFile async {
-    final path = await _appPath;
-    return new File('$path/timetable.json');
   }
 
   Future<File> writeTimetable(String json) async {
     final storeFileTrace = FirebasePerformance.instance.newTrace('Store local');
     await storeFileTrace.start();
-    final file = await _dataFile;
-    // Write the file
-    final result = await file.writeAsString(json);
+    final result = await this.store.writeFile('timetable.json', json);
     await storeFileTrace.stop();
     debugPrint('Store timetable');
     return result;
@@ -70,25 +61,27 @@ class _SchedulePageState extends State<SchedulePage> {
 
   Future<String> readTimetable() async {
     try {
-      final file = await _dataFile;
-
-      // Read the file
-      return file.readAsString();
+      return this.store.readFile('timetable.json');
     } catch (e) {
-
       // If we encounter an error, return null
       return null;
     }
   }
 
+  Future<Null>  _refresh() async {
+    ConfigState.of(_refreshIndicatorKey.currentContext).refresh();
+    await this.fetchConference();
+  }
+
   Future<Null> fetchConference() async {
     final httpTrace = await FirebasePerformance.startTrace('fetch timetable');
-    
+
     _refreshIndicatorKey.currentState.show();
-    final Response response = await get(_endpoint);
+    final config = ConfigState.of(_refreshIndicatorKey.currentContext).config;
+    final Response response = await get(config.getString('timetable_endpoint'));
     if (response.statusCode != 200) {
       this.setState(() {
-        this.isError = true;
+        this._isError = true;
       });
       return;
     }
@@ -105,83 +98,78 @@ class _SchedulePageState extends State<SchedulePage> {
     await httpTrace.stop();
     this.setState(() {
       debugPrint('Finish fetching');
-      this.conference = Conference.fromJson(responseJson);
+      this._conference = Conference.fromJson(responseJson);
     });
   }
 
-  Widget _buildBody() {
-    if (this.isError && this.conference == null) {
-      return new ErrorView();
-    } else if (this.conference != null) {
-      return new TabBarView(
-        children: this.conference.days
-            .map((day) => DayView(day))
-            .toList(growable: false),
-      );
-    }
-
-    return const Text('nothing');
-  }
-
-  List<Tab> _buildTabs() {
-    return this.conference.days
-        .map((day) => new Tab(text: 'Day ${day.day} (${day.date})'))
-        .toList();
-  }
-
-  Widget buildRefreshButton() {
-    return new FloatingActionButton(
-      onPressed: () {this.fetchConference();},
-      foregroundColor: const Color.fromRGBO(255, 255, 255, 1.0),
-      backgroundColor: PrimaryColor,
-      child: const Icon(Icons.autorenew),
+  @override
+  Widget build(BuildContext context) {
+    return new _ConferenceTimetable(
+      conference: _conference,
+      refresh: _refresh,
+      isError: _isError,
+      refreshIndicatorKey: _refreshIndicatorKey,
+      scaffoldKey: _scaffoldKey,
     );
+  }
+}
+
+class _ConferenceTimetable extends StatelessWidget {
+  final GlobalKey<ScaffoldState> scaffoldKey;
+  final GlobalKey<RefreshIndicatorState> refreshIndicatorKey;
+
+  final Conference conference;
+  final RefreshCallback refresh;
+  final bool isError;
+
+  _ConferenceTimetable({
+    this.conference,
+    this.refresh,
+    this.isError,
+    this.scaffoldKey,
+    this.refreshIndicatorKey,
+  });
+
+  void _callback() {
+    this.refresh();
   }
 
   @override
   Widget build(BuildContext context) {
     return new RefreshIndicator(
-      key: _refreshIndicatorKey,
-      onRefresh: this.fetchConference,
-      child: this.buildLayer(),
+      key: refreshIndicatorKey,
+      onRefresh: refresh,
+      child: Builder(
+        builder: (BuildContext context) {
+          if (this.conference == null) {
+            return new LoadingView(new RefreshButton(_callback));
+          }
+          final config = ConfigState.of(context).config;
+          final tabs = new DefaultTabController(
+              length: this.conference.days.length,
+              child: new Scaffold(
+                key: scaffoldKey,
+                appBar: new AppBar(
+                  elevation: 2.0,
+                  title: new Text(
+                      config.getString('title_bar_text'),
+                      style: const TextStyle(
+                          color: SecondaryColor
+                      )
+                  ),
+                  bottom: new TabBar(tabs: this.conference.days
+                      .map((day) => new Tab(text: 'Day ${day.day} (${day.date})'))
+                      .toList()), // This is the title in the app bar.
+                ),
+                floatingActionButton: new RefreshButton(_callback),
+                body: new Body(conference, isError),
+                drawer: const PageDrawer(),
+              )
+          );
+
+          return tabs;
+        },
+      ),
     );
-  }
-
-  Widget buildLayer() {
-    if (this.conference == null) {
-      return new LoadingView(this.buildRefreshButton());
-    }
-
-    final tabs = new DefaultTabController(
-        length: this.conference.days.length,
-        child: new Scaffold(
-          key: _scaffoldKey,
-          appBar: new AppBar(
-            elevation: 2.0,
-            title: const Text(
-                AppTitle,
-                style: const TextStyle(
-                    color: SecondaryColor
-                )
-            ),
-            bottom: new TabBar(tabs: this._buildTabs()), // This is the title in the app bar.
-          ),
-          floatingActionButton: this.buildRefreshButton(),
-          body: this._buildBody(),
-          drawer: this._buildDrawer(),
-        )
-    );
-
-    return tabs;
-  }
-
-  Widget _buildDrawer() {
-    return new AppDrawer(<DrawerItem>[
-      new DrawerItem(
-        title: 'Schedule',
-        icon: Icons.event,
-        route: '/',
-      )
-    ]);
   }
 }
