@@ -150,16 +150,21 @@ class _ConferenceTimetable extends StatelessWidget {
               child: new Scaffold(
                 key: scaffoldKey,
                 appBar: new AppBar(
-                  elevation: 2.0,
+                  elevation: 4.0,
                   title: new Text(
                       config.getString('title_bar_text'),
                       style: const TextStyle(
-                          color: SecondaryColor
+                        color: SecondaryColor,
+                        fontFamily: 'Open Sans',
                       )
                   ),
-                  bottom: new TabBar(tabs: this.conference.days
-                      .map((day) => new Tab(text: 'Day ${day.day} (${day.date})'))
-                      .toList()), // This is the title in the app bar.
+                  bottom: new TabBar(
+                      indicatorColor: SecondaryColor,
+                      indicatorWeight: 3.0,
+                      tabs: this.conference.days
+                          .map((day) => new Tab(text: 'Day ${day.day} (${day.date})'))
+                          .toList()
+                  ), // This is the title in the app bar.
                 ),
                 floatingActionButton: new RefreshButton(_callback),
                 body: new Body(conference, isError),

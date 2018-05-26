@@ -10,6 +10,7 @@ class RefreshButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new FloatingActionButton(
+      elevation: 8.0,
       onPressed: _callback,
       foregroundColor: const Color.fromRGBO(255, 255, 255, 1.0),
       backgroundColor: PrimaryColor,

@@ -2,28 +2,7 @@ import 'package:flutter/material.dart';
 import 'state.dart';
 import '../../const.dart';
 import '../../bibliothiki/html.dart';
-
-class Separator extends StatelessWidget {
-  const Separator();
-
-  @override
-  Widget build(BuildContext context) {
-    return new SizedBox(
-      height: 0.0,
-      child: new Center(
-        child: new Container(
-          height: 0.0,
-          margin: new EdgeInsetsDirectional.only(start: 0.0),
-          decoration: new BoxDecoration(
-            border: new Border(
-              bottom: Divider.createBorderSide(context, color: PrimaryColor, width: 2.0),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+import '../../widgets/divider.dart';
 
 class DetailView extends StatelessWidget {
   final Event event;
@@ -40,6 +19,9 @@ class DetailView extends StatelessWidget {
         title: new Text(
           event.display,
           overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontFamily: 'Open Sans',
+          ),
         ),
       ),
       body: this._buildList(context),
@@ -80,12 +62,12 @@ class DetailView extends StatelessWidget {
     ];
 
     if (this.event.description.length > 0) {
-      widgets.add(const Separator());
+      widgets.add(const HeightDivider(color: PrimaryColor, height: 2.0));
       widgets.add(new _AbstractCard(this.event.description));
     }
 
     this.event.speakers.forEach((speaker) {
-      widgets.add(const Separator());
+      widgets.add(const HeightDivider(color: PrimaryColor, height: 2.0));
       widgets.add(new _SpeakerCard(speaker));
     });
 
@@ -215,7 +197,8 @@ class _AbstractCard extends StatelessWidget {
             child: new Text(
               cleanHTML(abstract),
               style: const TextStyle(
-                height: 1.2,
+                height: 1.1,
+                fontFamily: 'Open Sans',
               ),
             ),
           ),
@@ -250,7 +233,7 @@ class _SpeakerCard extends StatelessWidget {
               children: <Widget>[
                 new Positioned.fill(
                   child: new Image.network(
-                    this.speaker.thumbnail.length > 0 ? this.speaker.thumbnail : 'https://file.hkoscon.org/speakers/2017/unknown.png',
+                    _imageUrl,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -277,7 +260,7 @@ class _SpeakerCard extends StatelessWidget {
           new Padding(
             padding: const EdgeInsets.only(top: 12.0),
             child: new Text(
-              '${this.speaker.community} / ${this.speaker.country}',
+              _meta,
               style: const TextStyle(
                 fontSize: 18.0,
               ),
@@ -289,11 +272,27 @@ class _SpeakerCard extends StatelessWidget {
               cleanHTML(this.speaker.description),
               style: const TextStyle(
                 height: 1.2,
+                fontFamily: 'Open Sans',
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  get _meta {
+    if (this.speaker.community.length > 0) {
+      return '${this.speaker.community} / ${this.speaker.country}';
+    }
+
+    return this.speaker.country;
+  }
+
+  get _imageUrl {
+    if (this.speaker.thumbnail.length > 0) {
+      return this.speaker.thumbnail;
+    }
+    return 'https://file.hkoscon.org/speakers/2017/unknown.png';
   }
 }

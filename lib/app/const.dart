@@ -6,7 +6,8 @@ const String Version = '2018.3.0';
 const Color PrimaryColor = const Color(0xFF294454);
 const Color SecondaryColor = const Color(0xFFF3CB02);
 
-final ThemeData appTheme = new ThemeData(
+
+final ThemeData appTheme = ThemeData.light().copyWith(
   brightness: Brightness.light,
   primaryColor: PrimaryColor,
   accentColor: SecondaryColor,

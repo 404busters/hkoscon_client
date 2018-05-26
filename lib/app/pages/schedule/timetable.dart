@@ -36,26 +36,18 @@ class TimeslotView extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: this.buildChildren(),
+            children: this._buildChildren(),
           ),
         )
     );
   }
 
-  List<Widget> buildChildren() {
-    final List<Widget> widgets = this.timeslot.events
-        .map<Widget>((event) => EventView(
-      event,
-      this.timeslot.startTime,
-      this.timeslot.endTime,
-      this.date,
-      this.day,
-    ))
-        .toList(growable: true);
+  List<Widget> _buildChildren() {
+    final List<Widget> widgets = _buildEventChildren();
 
-    widgets.insert(0, Padding(
+    widgets.insert(0, new Padding(
         padding: const EdgeInsets.only(left: 8.0),
-        child:Text('${timeslot.startTime} - ${timeslot.endTime}',
+        child: new Text('${timeslot.startTime} - ${timeslot.endTime}',
           textAlign: TextAlign.left,
           style: const TextStyle(
             color: PrimaryColor,
@@ -64,6 +56,21 @@ class TimeslotView extends StatelessWidget {
         )));
 
     return widgets;
+  }
+
+  List<Widget> _buildEventChildren() {
+    return this.timeslot.events
+        .map<Widget>(_buildCard)
+        .toList(growable: true);
+  }
+
+  Widget _buildCard(Event event) {
+    return new EventView(event,
+      this.timeslot.startTime,
+      this.timeslot.endTime,
+      this.date,
+      this.day,
+    );
   }
 }
 
@@ -138,6 +145,7 @@ class EventView extends StatelessWidget {
 
   Widget _buildCard() {
     return new Card(
+        elevation: 1.0,
         child: new Padding(
           padding: const EdgeInsets.all(16.0),
           child: new Row(
@@ -162,15 +170,24 @@ class VenueView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Text content;
+    String content;
     if (this.venue.name.length == 0) {
-      content = const Text('SP');
+      content = 'SP';
     } else if (this.venue.name.startsWith('Conference')) {
-      content =  new Text('H${this.venue.name.substring(16, 17)}');
+      content =  'H${this.venue.name.substring(16, 17)}';
     } else {
-      content = new Text(this.venue.name.substring(0, 2).toUpperCase());
+      content = this.venue.name.substring(0, 2).toUpperCase();
     }
 
-    return new CircleAvatar(child: content);
+    return new CircleAvatar(
+      backgroundColor: PrimaryColor,
+      child: new Text(
+        content,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+    );
   }
 }
