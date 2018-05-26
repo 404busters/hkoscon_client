@@ -6,7 +6,7 @@ const String appDisplayTitle = 'HKOSCon';
 const String AppTitle = 'HKOSCon 2018';
 const supportedLocales = const <Locale>[const Locale('en', 'GB')];
 
-const String appVersion = '2018.3.0';
+const String appVersion = '2018.3.1';
 final Version semVer = Version(2018, 3, 1);
 
 const Color PrimaryColor = const Color(0xFF294454);
