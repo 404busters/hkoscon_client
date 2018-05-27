@@ -118,7 +118,7 @@ class _MetaCard extends StatelessWidget {
                 _MetaRow(
                   Icons.event,
                   'Time',
-                  '${this.date} (Day ${this.day}) ~ ${this.startTime} - ${this.endTime}',
+                  '${this.date} (Day ${this.day}) ~ ${this.startTime}\u{00A0}\u{2011}\u{00A0}${this.endTime}',
                 ),
                 _MetaRow(
                   Icons.explore,
@@ -153,17 +153,22 @@ class _MetaRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: new Row(
-        children: <Widget>[
-          new Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: new Icon(this.icon, color: Colors.black87,),
-          ),
-          new FittedBox(child: new Text(this.content.length > 0 ?this.content : '??')),
-        ],
-      ),
+    return new Container(
+      child: new Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: new Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            new Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: new Icon(this.icon, color: Colors.black87,),
+            ),
+            new Expanded(
+              child: new Text(this.content.length > 0 ? this.content : '??'),
+            )
+          ],
+        ),
+      )
     );
   }
 }

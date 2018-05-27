@@ -35,8 +35,8 @@ android {
         applicationId "org.hkoscon"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 20180301
-        versionName "2018.3.1"
+        versionCode 20180302
+        versionName "2018.3.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 

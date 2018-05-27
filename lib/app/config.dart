@@ -25,6 +25,10 @@ class ConfigState extends State<ConfigWrapper> {
     return context.ancestorStateOfType(const TypeMatcher<ConfigState>());
   }
 
+  static RemoteConfig remoteConfig(BuildContext context) {
+    return ConfigState.of(context).config;
+  }
+
   Future<bool> refresh() async {
     await this.config.fetch();
     return this.config.activateFetched();

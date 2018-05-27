@@ -70,8 +70,12 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   Future<Null>  _refresh() async {
-    ConfigState.of(_refreshIndicatorKey.currentContext).refresh();
-    await this.fetchConference();
+    try {
+      ConfigState.of(_refreshIndicatorKey.currentContext).refresh();
+      await this.fetchConference();
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<Null> fetchConference() async {
